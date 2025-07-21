@@ -106,18 +106,18 @@
     <button onclick="abrirAjuda()">❓</button>
   </header>
   <main>
-    <label>CHAPA DO FUNCIONÁRIO:</label>
-    <input id="chapa" maxlength="6" pattern="\\d{6}" required />
-    <label>DATA DE PAGAMENTO:</label>
-    <input id="data" type="date" />
-    <label>CÓDIGO DO EVENTO:</label>
-    <input id="evento" maxlength="4" />
-    <label>HORA (HHH:MM):</label>
-    <input id="hora" maxlength="6" oninput="formatarHora(this)" />
-    <label>REFERÊNCIA:</label>
+    <label for="chapa">CHAPA DO FUNCIONÁRIO:</label>
+    <input id="chapa" maxlength="6" pattern="\\d{6}" required aria-required="true" />
+    <label for="data">DATA DE PAGAMENTO:</label>
+    <input id="data" type="date" required aria-required="true" />
+    <label for="evento">CÓDIGO DO EVENTO:</label>
+    <input id="evento" maxlength="4" required aria-required="true" />
+    <label for="hora">HORA (HHH:MM):</label>
+    <input id="hora" maxlength="6" oninput="formatarHora(this)" required aria-required="true" />
+    <label for="referencia">REFERÊNCIA:</label>
     <input id="referencia" oninput="formatarValor(this)" />
-    <label>VALOR:</label>
-    <input id="valor" oninput="formatarValor(this)" />
+    <label for="valor">VALOR:</label>
+    <input id="valor" oninput="formatarValor(this)" required aria-required="true" />
     <label>VALOR ALTERADO MANUALMENTE:</label>
     <input type="checkbox" id="manual" />
     <button onclick="adicionarLinha()">Adicionar</button>
@@ -171,6 +171,10 @@
       const hora = document.getElementById('hora').value || '';
       const ref = document.getElementById('referencia').value || '';
       const val = document.getElementById('valor').value || '';
+      if (!chapa || !data || !evento || !hora || !val) {
+        alert("Por favor, preencha todos os campos obrigatórios.");
+        return;
+      }
       const manual = document.getElementById('manual').checked ? 'S;N;' : 'N;N;';
       const valorig = val;
       const linha = { chapa, data, evento, hora, ref, val, valorig, manual };
@@ -181,7 +185,7 @@
       const tbody = document.querySelector('tbody');
       tbody.innerHTML = '';
       dados.forEach((d, i) => {
-        tbody.innerHTML += `<tr><td>${d.chapa}</td><td>${d.data}</td><td>${d.evento}</td><td>${d.hora}</td><td>${d.ref}</td><td>${d.val}</td><td>${d.valorig}</td><td>${d.manual}</td><td><button onclick="editar(${i})">✏️</button><button onclick="excluir(${i})">❌</button></td></tr>`;
+        tbody.innerHTML += `<tr><td>${d.chapa}</td><td>${d.data}</td><td>${d.evento}</td><td>${d.hora}</td><td>${d.ref}</td><td>${d.val}</td><td>${d.valorig}</td><td>${d.manual}</td><td><button onclick="editar(${i})">✏</button><button onclick="excluir(${i})">❌</button></td></tr>`;
       });
     }
     function excluir(i) {
