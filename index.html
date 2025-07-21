@@ -7,35 +7,34 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #121212;
-      color: #fff;
+      background-color: #f2f2f2; /* Cor clara para o fundo */
+      color: #333; /* Texto escuro */
       margin: 0;
       padding: 0;
     }
     header {
-      background-color: #003366;
+      background-color: #003366; /* Azul forte da faculdade */
       color: white;
       padding: 1rem;
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
+    }
+    header img {
+      width: 150px; /* Ajuste o tamanho da logo conforme necessário */
+      margin-bottom: 1rem;
     }
     header h1 {
       margin: 0;
-      font-size: 1.5rem;
-    }
-    header button {
-      background: none;
-      border: none;
-      color: #FFD700;
-      font-size: 1.5rem;
-      cursor: pointer;
+      font-size: 1.8rem;
+      text-align: center;
     }
     main {
       padding: 2rem;
-      background: #1e1e1e;
+      background: #ffffff; /* Fundo branco para o conteúdo */
       border-radius: 8px;
       margin: 1rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
     label {
       display: block;
@@ -47,12 +46,12 @@
       padding: 0.5rem;
       margin-top: 0.3rem;
       border-radius: 5px;
-      border: 1px solid #444;
-      background-color: #2a2a2a;
-      color: #fff;
+      border: 1px solid #ccc; /* Borda clara */
+      background-color: #f9f9f9; /* Fundo claro para campos de entrada */
+      color: #333;
     }
     button {
-      background-color: #FFD700;
+      background-color: #FFD700; /* Cor amarela */
       color: #000;
       padding: 0.5rem 1rem;
       border: none;
@@ -62,7 +61,7 @@
       transition: background-color 0.3s;
     }
     button:hover {
-      background-color: #ffc107;
+      background-color: #ffc107; /* Amarelo mais escuro ao passar o mouse */
     }
     table {
       width: 100%;
@@ -70,20 +69,22 @@
       border-collapse: collapse;
     }
     th, td {
-      border: 1px solid #444;
-      padding: 0.5rem;
+      border: 1px solid #ccc; /* Borda clara */
+      padding: 0.8rem;
       text-align: center;
-      background-color: #2a2a2a;
+      background-color: #f2f2f2; /* Fundo claro para a tabela */
     }
     th {
-      background-color: #003366;
+      background-color: #003366; /* Azul forte para cabeçalho da tabela */
+      color: white;
     }
     footer {
-      background-color: #003366;
+      background-color: #003366; /* Azul forte */
       color: white;
       text-align: center;
       font-size: 0.75rem;
       padding: 1rem;
+      margin-top: 2rem; /* Margem superior */
     }
     #modalAjuda {
       display: none;
@@ -91,16 +92,18 @@
       top: 10%;
       left: 50%;
       transform: translateX(-50%);
-      background: #222;
+      background: #ffffff; /* Fundo do modal */
       padding: 2rem;
       border-radius: 8px;
-      color: white;
+      color: black;
       width: 80%;
       max-width: 500px;
       z-index: 10;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
     #modalAjuda h2 {
       margin-top: 0;
+      color: #003366; /* Azul forte */
     }
     #overlay {
       display: none;
@@ -109,13 +112,14 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0, 0, 0, 0.5);
       z-index: 9;
     }
   </style>
 </head>
 <body>
   <header>
+    <img src="URL_DA_LOGO_AQUI" alt="Logo da Faculdade Nilton Lins" />
     <h1>IMPORTAÇÃO DE MOVIMENTO TOTVS RM - GRUPO NILTON LINS</h1>
     <button onclick="abrirAjuda()">❓</button>
   </header>
@@ -124,19 +128,19 @@
     <input id="chapa" maxlength="6" pattern="\\d{6}" required aria-required="true" />
     
     <label for="data">DATA DE PAGAMENTO:</label>
-    <input id="data" type="date" required aria-required="true" />
+    <input id="data" type="date" />
     
     <label for="evento">CÓDIGO DO EVENTO:</label>
     <input id="evento" maxlength="4" required aria-required="true" />
     
     <label for="hora">HORA (HHH:MM):</label>
-    <input id="hora" maxlength="6" oninput="formatarHora(this)" required aria-required="true" />
+    <input id="hora" maxlength="6" oninput="formatarHora(this)" />
     
     <label for="referencia">REFERÊNCIA:</label>
     <input id="referencia" oninput="formatarValor(this)" />
     
     <label for="valor">VALOR:</label>
-    <input id="valor" oninput="formatarValor(this)" required aria-required="true" />
+    <input id="valor" oninput="formatarValor(this)" />
     
     <label>VALOR ALTERADO MANUALMENTE:</label>
     <input type="checkbox" id="manual" />
@@ -179,8 +183,16 @@
     let dados = [];
     
     function formatarHora(input) {
-      let valor = input.value.replace(/[^0-9]/g, '').padStart(5, '0');
-      input.value = valor.length > 3 ? valor.slice(0, valor.length - 2) + ':' + valor.slice(-2) : valor;
+      // Permitir apenas dígitos e formatação HHH:MM
+      let valor = input.value.replace(/[^0-9]/g, ''); // Remove caracteres não numéricos
+      if (valor.length > 5) {
+        valor = valor.slice(0, 5); // Limitar a 5 dígitos
+      }
+      if (valor.length > 3) {
+        input.value = valor.slice(0, 3) + ':' + valor.slice(3); // Formatar como HHH:MM
+      } else {
+        input.value = valor; // Apenas mostra os dígitos digitados
+      }
     }
     
     function formatarValor(input) {
@@ -194,12 +206,12 @@
     
     function adicionarLinha() {
       const chapa = document.getElementById('chapa').value;
-      const data = document.getElementById('data').value.split('-').reverse().join('');
+      const data = document.getElementById('data').value.split('-').reverse().join('') || '';
       const evento = document.getElementById('evento').value;
       const hora = document.getElementById('hora').value || '';
       const ref = document.getElementById('referencia').value || '';
       const val = document.getElementById('valor').value || '';
-      if (!chapa || !data || !evento || !hora || !val) {
+      if (!chapa || !evento) {
         alert("Por favor, preencha todos os campos obrigatórios.");
         return;
       }
