@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-
+<html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,157 +7,229 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #1c1c1c;
+      background-color: #121212;
       color: #fff;
       margin: 0;
       padding: 0;
     }
-
     header {
       background-color: #003366;
-      color: #FFD700;
+      color: white;
       padding: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
-
     header h1 {
-      font-size: 1.2rem;
       margin: 0;
+      font-size: 1.2rem;
     }
-
-    .container {
+    header button {
+      background: none;
+      border: none;
+      color: #FFD700;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    main {
       padding: 1rem;
     }
-
     label {
       display: block;
-      margin-top: 0.8rem;
-    }
-
-    input {
-      padding: 0.4rem;
-      width: 100%;
-      box-sizing: border-box;
-      margin-top: 0.2rem;
-    }
-
-    button {
       margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background-color: #FFD700;
-      color: #003366;
-      border: none;
-      cursor: pointer;
-      font-weight: bold;
     }
-
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      margin-top: 0.3rem;
+      border-radius: 5px;
+      border: none;
+    }
+    button {
+      background-color: #FFD700;
+      color: #000;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
     table {
       width: 100%;
+      margin-top: 2rem;
       border-collapse: collapse;
-      margin-top: 1rem;
     }
-
     th, td {
-      border: 1px solid #FFD700;
+      border: 1px solid #444;
       padding: 0.5rem;
       text-align: center;
     }
-
     footer {
       background-color: #003366;
-      color: #FFD700;
+      color: white;
       text-align: center;
+      font-size: 0.75rem;
       padding: 1rem;
-      font-size: 0.85rem;
     }
-
-    .help-button {
-      background-color: transparent;
-      border: 2px solid #FFD700;
-      color: #FFD700;
-      border-radius: 4px;
-      padding: 0.3rem 0.6rem;
-      cursor: pointer;
-    }
-
-    .modal {
+    #modalAjuda {
       display: none;
       position: fixed;
-      z-index: 999;
-      padding-top: 60px;
-      left: 0;
+      top: 10%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #222;
+      padding: 2rem;
+      border-radius: 8px;
+      color: white;
+      width: 80%;
+      max-width: 500px;
+      z-index: 10;
+    }
+    #modalAjuda h2 {
+      margin-top: 0;
+    }
+    #overlay {
+      display: none;
+      position: fixed;
       top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
-      overflow: auto;
-      background-color: rgba(0, 0, 0, 0.9);
-    }
-
-    .modal-content {
-      background-color: #fff;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      color: #000;
-    }
-
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
-
-    .close:hover,
-    .close:focus {
-      color: black;
-      text-decoration: none;
-      cursor: pointer;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 9;
     }
   </style>
 </head>
-
 <body>
   <header>
     <h1>IMPORTAÇÃO DE MOVIMENTO TOTVS RM - GRUPO NILTON LINS</h1>
-    <button class="help-button" onclick="document.getElementById('modal').style.display='block'">❓ Ajuda</button>
+    <button onclick="abrirAjuda()">❓</button>
   </header>
-
-  <div class="container">
-    <!-- Campos de entrada -->
-    <!-- Aqui entram os inputs com máscaras -->
-    <!-- Inclua as funções JS completas abaixo -->
+  <main>
+    <label>CHAPA DO FUNCIONÁRIO:</label>
+    <input id="chapa" maxlength="6" pattern="\\d{6}" required />
+    <label>DATA DE PAGAMENTO:</label>
+    <input id="data" type="date" />
+    <label>CÓDIGO DO EVENTO:</label>
+    <input id="evento" maxlength="4" />
+    <label>HORA (HHH:MM):</label>
+    <input id="hora" maxlength="6" oninput="formatarHora(this)" />
+    <label>REFERÊNCIA:</label>
+    <input id="referencia" oninput="formatarValor(this)" />
+    <label>VALOR:</label>
+    <input id="valor" oninput="formatarValor(this)" />
+    <label>VALOR ALTERADO MANUALMENTE:</label>
+    <input type="checkbox" id="manual" />
+    <button onclick="adicionarLinha()">Adicionar</button>
+    <button onclick="exportar('txt')">Exportar TXT</button>
+    <button onclick="exportar('csv')">Exportar CSV</button>
+    <button onclick="exportar('xlsx')">Exportar Excel</button>
+    <button onclick="excluirTudo()">Excluir Tudo</button>
+    <table id="tabela">
+      <thead>
+        <tr>
+          <th>CHAPA</th><th>DATA</th><th>EVENTO</th><th>HORA</th><th>REF</th><th>VALOR</th><th>VALOR ORIG</th><th>MARCAÇÃO</th><th>AÇÕES</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+  <div id="overlay"></div>
+  <div id="modalAjuda">
+    <h2>Ajuda</h2>
+    <p><strong>CHAPA:</strong> 6 dígitos obrigatórios.</p>
+    <p><strong>DATA:</strong> Data de pagamento (formato brasileiro).</p>
+    <p><strong>EVENTO:</strong> Código do evento com 4 caracteres.</p>
+    <p><strong>HORA:</strong> Formato HHH:MM (ex: 135:00).</p>
+    <p><strong>REFERÊNCIA, VALOR:</strong> Formato contábil (ex: 1.234,56).</p>
+    <p><strong>VALOR ORIGINAL:</strong> Será preenchido igual ao VALOR.</p>
+    <p><strong>MARCAÇÃO:</strong> S;N; se alterado manualmente, senão N;N;</p>
+    <button onclick="fecharAjuda()">Fechar</button>
   </div>
-
   <footer>
-    DIREITOS PRESERVADOS AO GRUPO NILTON LINS - UNIVERSIDADE NILTON LINS, Av Professor Nilton Lins, 3259 - Parque
-    Laranjeiras, Flores - CEP: 69.058-040 - FONE: (92) 3643-2064 / 3643-2063 / 3643-2062 / 3643-2097 / 3643-2082 -
-    WhatsApp: (92) 9 9190-3748
+    DIREITOS PRESERVADOS AO GRUPO NILTON LINS - UNIVERSIDADE NILTON LINS, Av Professor Nilton Lins, 3259 - Parque Laranjeiras, Flores - CEP: 69.058-040 - FONE: (92) 3643-2064 / 3643-2063 / 3643-2062 / 3643-2097 / 3643-2082 - WhatsApp: (92) 9 9190-3748
   </footer>
-
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <span class="close" onclick="document.getElementById('modal').style.display='none'">&times;</span>
-      <h2>Como usar esta ferramenta:</h2>
-      <ul>
-        <li><strong>CHAPA:</strong> código do funcionário (6 caracteres obrigatórios)</li>
-        <li><strong>DATA DE PAGAMENTO:</strong> data no formato ddmmaaaa</li>
-        <li><strong>CÓDIGO DO EVENTO:</strong> código de evento (alfanumérico, 4 caracteres)</li>
-        <li><strong>HORA:</strong> horas no formato HHH:MM (ex: 013:45)</li>
-        <li><strong>REFERÊNCIA / VALOR / VALOR ORIGINAL:</strong> valores em formato contábil</li>
-        <li><strong>VALOR ORIGINAL:</strong> automaticamente replicado do VALOR</li>
-        <li><strong>Campos finais N;N ou S;N:</strong> definidos com botão de alteração manual</li>
-      </ul>
-    </div>
-  </div>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <script>
-    // Aqui entra o código JS que cuida das máscaras, inserções, edição, exportações etc
-    // Se quiser, posso colar o restante do JS nesta estrutura HTML
+    let dados = [];
+    function formatarHora(input) {
+      let valor = input.value.replace(/[^0-9]/g, '').padStart(5, '0');
+      input.value = valor.length > 3 ? valor.slice(0, valor.length - 2) + ':' + valor.slice(-2) : valor;
+    }
+    function formatarValor(input) {
+      let val = input.value.replace(/\D/g, '');
+      if (val.length > 2) {
+        let inteiro = val.slice(0, -2).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        let decimal = val.slice(-2);
+        input.value = inteiro + ',' + decimal;
+      } else input.value = val;
+    }
+    function adicionarLinha() {
+      const chapa = document.getElementById('chapa').value;
+      const data = document.getElementById('data').value.split('-').reverse().join('');
+      const evento = document.getElementById('evento').value;
+      const hora = document.getElementById('hora').value || '';
+      const ref = document.getElementById('referencia').value || '';
+      const val = document.getElementById('valor').value || '';
+      const manual = document.getElementById('manual').checked ? 'S;N;' : 'N;N;';
+      const valorig = val;
+      const linha = { chapa, data, evento, hora, ref, val, valorig, manual };
+      dados.push(linha);
+      atualizarTabela();
+    }
+    function atualizarTabela() {
+      const tbody = document.querySelector('tbody');
+      tbody.innerHTML = '';
+      dados.forEach((d, i) => {
+        tbody.innerHTML += `<tr><td>${d.chapa}</td><td>${d.data}</td><td>${d.evento}</td><td>${d.hora}</td><td>${d.ref}</td><td>${d.val}</td><td>${d.valorig}</td><td>${d.manual}</td><td><button onclick="editar(${i})">✏️</button><button onclick="excluir(${i})">❌</button></td></tr>`;
+      });
+    }
+    function excluir(i) {
+      dados.splice(i, 1);
+      atualizarTabela();
+    }
+    function editar(i) {
+      const d = dados[i];
+      document.getElementById('chapa').value = d.chapa;
+      document.getElementById('data').value = `${d.data.slice(4, 8)}-${d.data.slice(2, 4)}-${d.data.slice(0, 2)}`;
+      document.getElementById('evento').value = d.evento;
+      document.getElementById('hora').value = d.hora;
+      document.getElementById('referencia').value = d.ref;
+      document.getElementById('valor').value = d.val;
+      document.getElementById('manual').checked = d.manual === 'S;N;';
+      excluir(i);
+    }
+    function excluirTudo() {
+      dados = [];
+      atualizarTabela();
+    }
+    function exportar(tipo) {
+      let linhas = dados.map(d => `${d.chapa};${d.data};${d.evento};${d.hora};${d.ref};${d.val};${d.valorig};${d.manual}`);
+      let conteudo = linhas.join('\n');
+      if (tipo === 'xlsx') {
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.aoa_to_sheet([
+          ['CHAPA','DATA','EVENTO','HORA','REF','VALOR','VALOR ORIG','MARCAÇÃO'],
+          ...dados.map(d => [d.chapa,d.data,d.evento,d.hora,d.ref,d.val,d.valorig,d.manual])
+        ]);
+        XLSX.utils.book_append_sheet(wb, ws, 'Exportação');
+        XLSX.writeFile(wb, 'movimentos.xlsx');
+      } else {
+        const blob = new Blob([conteudo], { type: 'text/plain;charset=utf-8' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `movimentos.${tipo}`;
+        link.click();
+      }
+    }
+    function abrirAjuda() {
+      document.getElementById('overlay').style.display = 'block';
+      document.getElementById('modalAjuda').style.display = 'block';
+    }
+    function fecharAjuda() {
+      document.getElementById('overlay').style.display = 'none';
+      document.getElementById('modalAjuda').style.display = 'none';
+    }
   </script>
 </body>
-
 </html>
