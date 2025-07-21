@@ -1,110 +1,164 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>IMPORTAÇÃO DE MOVIMENTO TOTVS RM - GRUPO NILTON LINS</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #1c1c1c;
+      color: #fff;
       margin: 0;
       padding: 0;
-      background-color: #1e1e1e;
-      color: #f0f0f0;
     }
+
     header {
+      background-color: #003366;
+      color: #FFD700;
+      padding: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 10px 20px;
-      background-color: #2c2c2c;
     }
+
     header h1 {
       font-size: 1.2rem;
+      margin: 0;
     }
-    header img {
-      height: 40px;
-    }
-    main {
-      padding: 20px;
-    }
-    input, select, button {
-      margin: 5px;
-      padding: 8px;
-      border-radius: 5px;
-      border: none;
-      font-size: 1rem;
-    }
-    input {
-      width: 180px;
-    }
+
     .container {
-      margin-bottom: 20px;
+      padding: 1rem;
     }
+
+    label {
+      display: block;
+      margin-top: 0.8rem;
+    }
+
+    input {
+      padding: 0.4rem;
+      width: 100%;
+      box-sizing: border-box;
+      margin-top: 0.2rem;
+    }
+
+    button {
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
+      background-color: #FFD700;
+      color: #003366;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
-      background-color: #333;
+      margin-top: 1rem;
     }
+
     th, td {
-      border: 1px solid #555;
-      padding: 8px;
+      border: 1px solid #FFD700;
+      padding: 0.5rem;
       text-align: center;
     }
-    th {
-      background-color: #444;
+
+    footer {
+      background-color: #003366;
+      color: #FFD700;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.85rem;
     }
-    .button-group button {
-      background-color: #007bff;
-      color: white;
+
+    .help-button {
+      background-color: transparent;
+      border: 2px solid #FFD700;
+      color: #FFD700;
+      border-radius: 4px;
+      padding: 0.3rem 0.6rem;
       cursor: pointer;
     }
-    .button-group button:hover {
-      background-color: #0056b3;
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      padding-top: 60px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.9);
     }
-    footer {
-      background-color: #2c2c2c;
-      text-align: center;
-      padding: 10px;
-      font-size: 0.9rem;
-      color: #ccc;
-    }
-    #readme {
-      background-color: #292929;
+
+    .modal-content {
+      background-color: #fff;
+      margin: auto;
       padding: 20px;
-      border-radius: 10px;
-      margin-bottom: 20px;
-      font-size: 0.95rem;
+      border: 1px solid #888;
+      width: 80%;
+      color: #000;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
     }
   </style>
 </head>
+
 <body>
   <header>
     <h1>IMPORTAÇÃO DE MOVIMENTO TOTVS RM - GRUPO NILTON LINS</h1>
-    <img src="logoNL CESNL.png" alt="Logo Grupo Nilton Lins">
+    <button class="help-button" onclick="document.getElementById('modal').style.display='block'">❓ Ajuda</button>
   </header>
-  <main>
-    <div id="readme">
-      <h2>📘 LEIA-ME: Instruções de uso da ferramenta</h2>
+
+  <div class="container">
+    <!-- Campos de entrada -->
+    <!-- Aqui entram os inputs com máscaras -->
+    <!-- Inclua as funções JS completas abaixo -->
+  </div>
+
+  <footer>
+    DIREITOS PRESERVADOS AO GRUPO NILTON LINS - UNIVERSIDADE NILTON LINS, Av Professor Nilton Lins, 3259 - Parque
+    Laranjeiras, Flores - CEP: 69.058-040 - FONE: (92) 3643-2064 / 3643-2063 / 3643-2062 / 3643-2097 / 3643-2082 -
+    WhatsApp: (92) 9 9190-3748
+  </footer>
+
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="document.getElementById('modal').style.display='none'">&times;</span>
+      <h2>Como usar esta ferramenta:</h2>
       <ul>
-        <li><strong>CHAPA DO FUNCIONÁRIO</strong>: Código único do colaborador. Deve conter exatamente 6 caracteres numéricos.</li>
-        <li><strong>DATA DE PAGAMENTO</strong>: Data no formato brasileiro (DD/MM/AAAA). Será exportada como DDMMAAAA.</li>
-        <li><strong>CÓDIGO DO EVENTO</strong>: Código alfanumérico de até 4 caracteres que representa o evento de folha.</li>
-        <li><strong>HORA</strong>: Hora no formato HHH:MM. A máscara insere os dois pontos automaticamente.</li>
-        <li><strong>REFERÊNCIA</strong>: Número decimal com até 13 dígitos inteiros e 2 decimais (formato contábil).</li>
-        <li><strong>VALOR</strong>: Valor financeiro no formato contábil (ponto separador de milhar e vírgula como decimal).</li>
-        <li><strong>VALOR ORIGINAL</strong>: Preenchido automaticamente com o mesmo valor do campo anterior.</li>
-        <li><strong>Valor alterado manualmente?</strong>: Define os dois campos finais como S;N; ou N;N; de forma automática.</li>
-        <li>Você pode editar ou excluir cada linha após adicionada.</li>
-        <li>Ao terminar, clique em "Exportar para TXT", "CSV" ou "Excel".</li>
+        <li><strong>CHAPA:</strong> código do funcionário (6 caracteres obrigatórios)</li>
+        <li><strong>DATA DE PAGAMENTO:</strong> data no formato ddmmaaaa</li>
+        <li><strong>CÓDIGO DO EVENTO:</strong> código de evento (alfanumérico, 4 caracteres)</li>
+        <li><strong>HORA:</strong> horas no formato HHH:MM (ex: 013:45)</li>
+        <li><strong>REFERÊNCIA / VALOR / VALOR ORIGINAL:</strong> valores em formato contábil</li>
+        <li><strong>VALOR ORIGINAL:</strong> automaticamente replicado do VALOR</li>
+        <li><strong>Campos finais N;N ou S;N:</strong> definidos com botão de alteração manual</li>
       </ul>
     </div>
-    <!-- Aqui começa o formulário e a lógica (omitido nesta resposta para simplificação visual) -->
-    <!-- Se quiser que eu envie o arquivo final como ZIP ou colar o resto aqui, posso fazer já formatado com tudo -->
-  </main>
-  <footer>
-    DIREITOS PRESERVADOS AO GRUPO NILTON LINS - UNIVERSIDADE NILTON LINS, Av Professor Nilton Lins, 3259 - Parque Laranjeiras, Flores - CEP: 69.058-040 - FONE: (92) 3643-2064 / 3643-2063 / 3643-2062 / 3643-2097 / 3643-2082 - WhatsApp: (92) 9 9190-3748
-  </footer>
+  </div>
+
+  <script>
+    // Aqui entra o código JS que cuida das máscaras, inserções, edição, exportações etc
+    // Se quiser, posso colar o restante do JS nesta estrutura HTML
+  </script>
 </body>
+
 </html>
